@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -80,11 +80,17 @@ namespace NMaier.SimpleDlna.Utilities
       if (!string.IsNullOrWhiteSpace(envpath)) {
         foreach (var p in envpath.
           Split(isWin ? ';' : ':')) {
-          try {
-            places.Add(new DirectoryInfo(p.Trim()));
-          }
-          catch (Exception) {
-            // ignored
+
+          if (!string.IsNullOrEmpty(p))
+          {
+            try
+            {
+              places.Add(new DirectoryInfo(p.Trim()));
+            }
+            catch (Exception)
+            {
+              // ignored
+            }
           }
         }
       }
@@ -102,15 +108,19 @@ namespace NMaier.SimpleDlna.Utilities
         };
         foreach (var di in folders) {
           try {
-            var r = di.GetFiles(executable, SearchOption.TopDirectoryOnly);
-            if (r.Length != 0) {
-              var rv = r[0];
-              LogManager.GetLogger(typeof (FFmpeg)).InfoFormat(
-                "Found {0} at {1}",
-                executable,
-                rv.FullName
+            if (di.Exists)
+            {
+              var r = di.GetFiles(executable, SearchOption.TopDirectoryOnly);
+              if (r.Length != 0)
+              {
+                var rv = r[0];
+                LogManager.GetLogger(typeof(FFmpeg)).InfoFormat(
+                  "Found {0} at {1}",
+                  executable,
+                  rv.FullName
                 );
-              return rv.FullName;
+                return rv.FullName;
+              }
             }
           }
           catch (Exception) {

@@ -12,3 +12,6 @@ setup/Release
 setup/*.cmd
 pages/
 cov-int*
+
+/.vs/**
+/UpgradeLog.htm
